@@ -1,15 +1,15 @@
-<div class="row">
-  <div class="col-md-9">
+<div class="row mb-2">
+  <div class="col-9">
     <h2>Your search for "{{q}}" yielded {{model.total}} items</h2>
   </div>
-  <div class="col-md-3">
-    {{search-form q=q onSearch=(action "doSearch") class="search-form-inline"}}
+  <div class="col-3">
+    {{search-form q=q onSearch=(action "doSearch") class="search-form-inline" size="sm"}}
   </div>
 </div>
 <div class="row">
-  <div class="col-md-12">
-    <table class="table table-responsive table-bordered table-hover table-striped">
-      <thead>
+  <div class="col-12">
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="thead-dark">
         <tr>
           <th>Title</th>
           <th>Type</th>
