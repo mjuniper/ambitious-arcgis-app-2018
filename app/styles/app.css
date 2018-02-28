@@ -1,0 +1,24 @@
+/* bootstrap styles */
+@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
+
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+/* index */
+.jumbotron-hero {
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(./images/Banner9.jpg) center top/cover no-repeat;
+}
+.jumbotron-hero h1 {
+  color:#fff;
+  text-shadow: 0 3px 2px rgba(0,0,0,0.75);
+  text-align: center;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #fff;
+  margin-bottom: 40px;
+}
