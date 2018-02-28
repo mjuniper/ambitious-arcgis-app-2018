@@ -7,8 +7,6 @@
 - node and npm - already installed
 - ember-cli - already installed (if not, `npm install -g ember-cli`)
 - Git - already installed on mac, windows users can download https://git-scm.com/download/win
-- bower - `npm install -g bower`
-- phantomjs - `npm install -g phantomjs-prebuilt`
 
 ### Ember new
 
@@ -18,57 +16,40 @@ ember new ambitious-arcgis-app
 cd ambitious-arcgis-app
 ```
 
-### Use Pods
-
-- open IDE of choice to ambitious-arcgis-app folder
-- set `"usePods": true` in .ember-cli
-- move app/templates/application.hbs to app/application/template.hbs
-- delete the root level controllers, routes, and templates directories
+### Run the app
 - in your terminal, enter
 ```shell
 ember serve
 ```
 - open a browser to http://localhost:4200/
 
-#### Notes:
-- about pods/the resolver
-
 ### Add some markup and CSS
 
-- open app/styles/app.css and add
+- `npm uninstall ember-welcome-page --save-dev`
+- restart ember server:
+  - `ctrl-c`
+  - `ember s`
+- open app/styles/app.scss and add
 
 ```css
 /* bootstrap styles */
-@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
+@import "ember-bootstrap/bootstrap";
 
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-
-.navbar {
-  margin-bottom: 20px;
+  padding-top: 3.5rem;
 }
 ```
 
-- open app/application/template.hbs replace its contents with:
+- open app/templates/application.hbs replace its contents with:
 
 ```hbs
-<div class="container">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <a class="navbar-brand" href="#">Ambitious ArcGIS App</a>
+</nav>
 
-  <!-- navbar -->
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <span class="navbar-brand">Ambitious ArcGIS App</span>
-      </div>
-    </div><!--/.container-fluid -->
-  </nav>
-
-  <!-- page content -->
+<div class="container mt-5">
   {{outlet}}
-
-</div> <!-- /container -->
+</div>
 ```
 
 #### Notes:
@@ -81,12 +62,12 @@ body {
 
 ### Add items route
 - `ember generate route items`
-- open app/items/route.js and replace its contents with:
+- open app/routes/items.js and replace its contents with:
 
 ```js
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
+export default Route.extend({
   // changes to these query parameter will cause this route to
   // update the model by calling the "model()" hook again
   queryParams: {
@@ -104,13 +85,13 @@ export default Ember.Route.extend({
 });
 ```
 
-- open app/items/template.hbs and replace its contents with:
+- open app/templates/items.hbs and replace its contents with:
 
 ```hbs
 <h2>Your search for "{{q}}" yielded {{model.total}} items</h2>
 ```
 
-- visit http://localhost:4200/items?q=test and http://localhost:4200/items?q=test&type=maps
+- visit http://localhost:4200/items?q=test
 
 #### Notes:
 - generators
