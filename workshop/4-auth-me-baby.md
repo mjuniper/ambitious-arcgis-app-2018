@@ -28,7 +28,7 @@ Now, move to the Authentication tab, and scroll to the bottom. Add `http://local
 
 ## Adding Sign-In to Our app
 
-First, let's add the markup to `/app/application/template.hbs`
+First, let's add the markup to `/app/templates/application.hbs`
 
 ```html
 <ul class="nav navbar-nav navbar-right">
@@ -45,25 +45,29 @@ Now we need to add the `signin` and `signout` actions to the application route.
 Let's generate the route.
 
 ```
-ember g route Application
+ember g route application
 ```
 
-Since the template already exists, the generator will ask us if we want to overwrite to skip that file - let's skip it. It should generate a `/app/application/route.js` file.
+Since the template already exists, the generator will ask us if we want to overwrite to skip that file - let's skip it. It should generate a `/app/routes/application.js` file.
 
 Let's start by just wiring things up...
 
 ```
-// application/route.js
-...
-actions: {
-  signin () {
-    Ember.debug(' do sign in');
-  },
-  signout () {
-    Ember.debug(' do sign out');
+// routes/application.js
+
+import Route from '@ember/routing/route';
+import { debug } from '@ember/debug';
+
+export default Route.extend({
+  actions: {
+    signin () {
+      debug(' do sign in');
+    },
+    signout () {
+      debug(' do sign out');
+    }
   }
-}
-...
+});
 ```
 
 Now let's run ember and see how things work. `ember s`, open `http://localhost:4200` in your browser, and open dev tools.
@@ -107,7 +111,7 @@ vendor.js:16263 DEBUG: AUTH SUCCESS:
 Signing out for apps not on `*arcgis.com` is very straight forward - we just ask torii to close the session.
 
 ```
-// application/route.js
+// routes/application.js
 ...
 actions: {
   signin () {
@@ -140,10 +144,10 @@ To use a dropdown in bootstrap we need the bootstrap javascript. To keep things 
 Open `/app/index.html`, and below the script tag that brings in `ambitious-arcgis-app.js`, add this license
 
 ```
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 ```
 
-Now, open up `/app/application/template.hbs` and replace the code between `{{#if session.isAuthenticated}}` and `{{else}}` as shown below.
+Now, open up `/app/templates/application.hbs` and replace the code between `{{#if session.isAuthenticated}}` and `{{else}}` as shown below.
 
 ```
 {{#if session.isAuthenticated}}
@@ -165,7 +169,7 @@ By default, `torii` stores the credentials in `localStorage`, let's look at that
 
 So - that is persisted. What we need to do is have Ember read that during it's boot cycle.
 
-The first hook we have in the application life-cycle is the `beforeModel()` hook on the application route. So let's open up `/app/application/route.js` and add that hook...
+The first hook we have in the application life-cycle is the `beforeModel()` hook on the application route. So let's open up `/app/routes/application.js` and add that hook...
 
 ```
 beforeModel () {
