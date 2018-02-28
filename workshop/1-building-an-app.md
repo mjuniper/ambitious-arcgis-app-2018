@@ -23,7 +23,7 @@ ember serve
 - open a browser to http://localhost:4200/
 
 ### Add some markup and CSS
-- open app/styles/app.scss and add
+- open app/styles/app.css and add
 
 ```css
 /* bootstrap styles */
@@ -112,7 +112,7 @@ export default Route.extend({
   <h1 class="display-3 text-light text-center mb-5">Ambitious ArcGIS App</h1>
   <form {{action "doSearch" on="submit"}}>
     <div class="input-group input-group-lg">
-      {{input class="form-control" placeholder="search for items" value=searchCopy}}
+      {{input class="form-control" placeholder="search for items" value=q}}
       <div class="input-group-append">
         <button class="btn btn-secondary" type="submit">Search</button>
       </div>
@@ -121,7 +121,7 @@ export default Route.extend({
 </div>
 ```
 
-- open up app/templates/application.hbs and add the following before the closing `nav` tag.
+- open app/templates/application.hbs and add the following before the closing `nav` tag.
 
 ```hbs
 <div class="collapse navbar-collapse">
@@ -165,7 +165,7 @@ actions: {
 
 ```js
 import { module, test } from 'qunit';
-import { visit, click, fillIn, currentURL, findAll } from '@ember/test-helpers';
+import { visit, click, fillIn, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 
 module('Acceptance | smoke', function(hooks) {
