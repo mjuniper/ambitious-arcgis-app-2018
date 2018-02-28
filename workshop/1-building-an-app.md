@@ -7,68 +7,43 @@
 - node and npm - already installed
 - ember-cli - already installed (if not, `npm install -g ember-cli`)
 - Git - already installed on mac, windows users can download https://git-scm.com/download/win
-- bower - `npm install -g bower`
-- phantomjs - `npm install -g phantomjs-prebuilt`
 
 ### Ember new
-
 - open a terminal to the root folder where you keep your projects and enter:
 ```shell
 ember new ambitious-arcgis-app
 cd ambitious-arcgis-app
 ```
 
-### Use Pods
-
-- open IDE of choice to ambitious-arcgis-app folder
-- set `"usePods": true` in .ember-cli
-- move app/templates/application.hbs to app/application/template.hbs
-- delete the root level controllers, routes, and templates directories
+### Run the app
 - in your terminal, enter
 ```shell
 ember serve
 ```
 - open a browser to http://localhost:4200/
 
-#### Notes:
-- about pods/the resolver
-
 ### Add some markup and CSS
-
 - open app/styles/app.css and add
 
 ```css
 /* bootstrap styles */
-@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
+@import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css";
 
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-
-.navbar {
-  margin-bottom: 20px;
+  padding-top: 3.5rem;
 }
 ```
 
-- open app/application/template.hbs replace its contents with:
+- open app/templates/application.hbs replace its contents with:
 
 ```hbs
-<div class="container">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <a class="navbar-brand" href="#">Ambitious ArcGIS App</a>
+</nav>
 
-  <!-- navbar -->
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <span class="navbar-brand">Ambitious ArcGIS App</span>
-      </div>
-    </div><!--/.container-fluid -->
-  </nav>
-
-  <!-- page content -->
+<div class="container mt-5">
   {{outlet}}
-
-</div> <!-- /container -->
+</div>
 ```
 
 #### Notes:
@@ -81,12 +56,12 @@ body {
 
 ### Add items route
 - `ember generate route items`
-- open app/items/route.js and replace its contents with:
+- open app/routes/items.js and replace its contents with:
 
 ```js
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
+export default Route.extend({
   // changes to these query parameter will cause this route to
   // update the model by calling the "model()" hook again
   queryParams: {
@@ -104,19 +79,19 @@ export default Ember.Route.extend({
 });
 ```
 
-- open app/items/template.hbs and replace its contents with:
+- open app/templates/items.hbs and replace its contents with:
 
 ```hbs
 <h2>Your search for "{{q}}" yielded {{model.total}} items</h2>
 ```
 
-- visit http://localhost:4200/items?q=test and http://localhost:4200/items?q=test&type=maps
+- visit http://localhost:4200/items?q=test
 
 #### Notes:
 - generators
 - route lifecycle hooks: model
 - data binding
-- ember object, get, set, extend, CPs - [ember twiddle](https://ember-twiddle.com/38e642b4a4f9b5ea748965f0bd9152ab?fileTreeShown=false&numColumns=2&openFiles=routes.application.js%2Ccontrollers.application.js)
+- ember object, get, set, extend, CPs - [ember twiddle](https://ember-twiddle.com/38e642b4a4f9b5ea748965f0bd9152ab?numColumns=2&openFiles=routes.application.js%2Ccontrollers.application.js)
 
 ### Add index route
 - `ember generate route index`
@@ -125,50 +100,45 @@ export default Ember.Route.extend({
 
 ```css
 /* index */
-.jumbotron-hero {
+.jumbotron {
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(./images/Banner9.jpg) center top/cover no-repeat;
-}
-.jumbotron-hero h1 {
-  color:#fff;
-  text-shadow: 0 3px 2px rgba(0,0,0,0.75);
-  text-align: center;
-  padding-bottom: 40px;
-  border-bottom: 1px solid #fff;
-  margin-bottom: 40px;
 }
 ```
 
-- open app/index/template.hbs and replace its contents with:
+- open app/templates/index.hbs and replace its contents with:
 
 ```hbs
-<!-- Main component for a primary marketing message or call to action -->
-<div class="jumbotron jumbotron-hero">
-  <h1>Ambitious ArcGIS App</h1>
+<div class="jumbotron">
+  <h1 class="display-3 text-light text-center mb-5">Ambitious ArcGIS App</h1>
   <form {{action "doSearch" on="submit"}}>
     <div class="input-group input-group-lg">
       {{input class="form-control" placeholder="search for items" value=q}}
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="submit">
-          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-        </button>
-      </span>
+      <div class="input-group-append">
+        <button class="btn btn-secondary" type="submit">Search</button>
+      </div>
     </div>
   </form>
 </div>
 ```
 
-- open up app/application/template.hbs and add the following immediately above this line: `</div><!--/.container-fluid -->`:
+- open app/templates/application.hbs and add the following before the closing `nav` tag.
 
 ```hbs
-<ul class="nav navbar-nav">
-  <li>{{#link-to "index" }}Home{{/link-to}}</li>
-  <li>{{#link-to "items" }}Items{{/link-to}}</li>
-</ul>
+<div class="collapse navbar-collapse">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      {{#link-to "index" class="nav-link"}}Home{{/link-to}}
+    </li>
+    <li class="nav-item">
+      {{#link-to "items" class="nav-link"}}Items{{/link-to}}
+    </li>
+  </ul>
+</div>
 ```
 
 ### Add index controller
 - `ember g controller index`
-- open app/index/controller.js and add the following to the controller definition:
+- open app/controllers/index.js and add the following to the controller definition:
 
 ```js
 actions: {
@@ -194,25 +164,25 @@ actions: {
 - open tests/acceptance/smoke-test.js and replace its contents with:
 
 ```js
-import { test } from 'qunit';
-import moduleForAcceptance from 'ambitious-arcgis-app/tests/helpers/module-for-acceptance';
+import { module, test } from 'qunit';
+import { visit, click, fillIn, currentURL } from '@ember/test-helpers';
+import { setupApplicationTest } from 'ember-qunit';
 
-moduleForAcceptance('Acceptance | smoke test');
+module('Acceptance | smoke', function(hooks) {
+  setupApplicationTest(hooks);
 
-test('smoke-test', function(assert) {
-  visit('/');
+  test('smoke-test', async function(assert) {
+    await visit('/');
 
-  andThen(function () {
     assert.equal(currentURL(), '/');
-  });
 
-  fillIn('form .input-group input', 'water');
-  click('form .input-group button');
+    await fillIn('form .input-group input', 'water');
+    await click('form .input-group button');
 
-  andThen(function () {
     assert.equal(currentURL(), '/items?q=water');
   });
 });
+
 ```
 
 - `ember test -s`
