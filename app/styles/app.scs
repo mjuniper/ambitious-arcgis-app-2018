@@ -1,11 +1,7 @@
-@import "ember-bootstrap/bootstrap";
+@import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css";
 
 body {
   padding-top: 3.5rem;
-}
-
-.navbar {
-  margin-bottom: 20px;
 }
 
 /* index */
