@@ -1,9 +1,7 @@
-/* bootstrap styles */
-@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
+@import "ember-bootstrap/bootstrap";
 
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 3.5rem;
 }
 
 .navbar {
@@ -11,7 +9,7 @@ body {
 }
 
 /* index */
-.jumbotron-hero {
+.jumbotron {
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(./images/Banner9.jpg) center top/cover no-repeat;
 }
 .jumbotron-hero h1 {
