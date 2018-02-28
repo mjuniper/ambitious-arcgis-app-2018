@@ -151,10 +151,10 @@ Now, open up `/app/templates/application.hbs` and replace the code between `{{#i
 
 ```
 {{#if session.isAuthenticated}}
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{session.currentUser.fullName}} <span class="caret"></span></a>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{session.currentUser.fullName}} <span class="caret"></span></a>
   <ul class="dropdown-menu">
-    <li><a href="#" {{action 'signout'}}>Sign Out</a></li>
+    <a class="dropdown-item" href="#" {{action 'signout'}}>Sign Out</a>
   </ul>
 </li>
 {{else}}
