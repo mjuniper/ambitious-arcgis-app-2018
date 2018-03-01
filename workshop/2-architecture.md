@@ -107,6 +107,7 @@ actions: {
 ## Add an items service
 
 - `ember g service items-service`
+- restart the ember server (`ctrl-c / ember s`)
 - add the fake `search` method to the service:
 
 ```js
@@ -239,7 +240,11 @@ export default Route.extend({
       </thead>
       <tbody>
         {{#each model.results as |item|}}
-          {{results-item model=item}}
+          <tr>
+            <td>{{item.title}}</td>
+            <td>{{item.type}}</td>
+            <td>{{item.owner}}</td>
+          </tr>
         {{/each}}
       </tbody>
     </table>
@@ -285,7 +290,7 @@ App should look/work the same.
 
 - `ember t -s`
 - note that 2 tests fail (these are tests that ember-cli generated for you when it generated your components)
-- open test/integration/components/results-item-test.js and replace its contents with:
+- open tests/integration/components/results-item-test.js and replace its contents with:
 
 ```js
 import { module, test } from 'qunit';
@@ -317,7 +322,7 @@ module('Integration | Component | results-item', function(hooks) {
 
 Note that only one test fails.
 
-- open test/integration/components/search-form-test.js and replace its contents with:
+- open tests/integration/components/search-form-test.js and replace its contents with:
 
 ```js
 import { module, test } from 'qunit';
@@ -373,6 +378,7 @@ Note that all tests pass.
 assert.equal(findAll('table tbody tr').length, 10);
 ```
 
+- Note that you will need to add `findAll` to the import from '@ember/test-helpers'
 - verify that all tests pass
 
 ### Notes:
