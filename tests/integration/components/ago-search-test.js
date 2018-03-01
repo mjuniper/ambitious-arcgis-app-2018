@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, fillIn, click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | search-form', function(hooks) {
+module('Integration | Component | ago-search', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
@@ -19,7 +19,7 @@ module('Integration | Component | search-form', function(hooks) {
     });
 
     // render component to the page
-    await render(hbs`{{search-form q=q onSearch=(action doSearch)}}`);
+    await render(hbs`{{ago-search q=q onSearch=(action doSearch)}}`);
 
     // inital dom state
     assert.equal(this.$('input').val().trim(), this.get('q'), 'initial value is set');
@@ -35,7 +35,7 @@ module('Integration | Component | search-form', function(hooks) {
     // test double for the action
     this.set('doSearch', () => {});
     // render component to the page
-    await render(hbs`{{search-form onSearch=(action doSearch) size="lg"}}`);
+    await render(hbs`{{ago-search onSearch=(action doSearch) size="lg"}}`);
     assert.equal(this.$('.input-group-lg').length, 1, 'set proper size');
   });
 });

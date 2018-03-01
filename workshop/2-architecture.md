@@ -4,8 +4,8 @@
 
 ## Refactor search form into a component
 
-- `ember g component search-form`
-- app/templates/components/search-form.hbs
+- `ember g component ago-search`
+- app/templates/components/ago-search.hbs
 
 ```hbs
 <form {{action onSearch searchCopy on="submit"}}>
@@ -18,7 +18,7 @@
 </form>
 ```
 
-- app/components/search-form.js
+- app/components/ago-search.js
 
 ```js
 import Component from '@ember/component';
@@ -26,7 +26,7 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
 
-  classNames: ['search-form'],
+  classNames: ['ago-search'],
 
   // use a copy so that we don't immediately update bound URL parameters
   searchCopy: computed.reads('q'),
@@ -47,7 +47,7 @@ export default Component.extend({
 - replace `<form>` tag in app/templates/index.hbs with:
 
 ```hbs
-{{search-form q=q onSearch=(action "doSearch") size="lg"}}
+{{ago-search q=q onSearch=(action "doSearch") size="lg"}}
 ```
 
 - replace `doSearch` action in app/controllers/index.js
@@ -99,7 +99,7 @@ actions: {
     <h2>Your search for "{{q}}" yielded {{model.total}} items</h2>
   </div>
   <div class="col-3">
-    {{search-form q=q onSearch=(action "doSearch") class="search-form-inline" size="sm"}}
+    {{ago-search q=q onSearch=(action "doSearch") class="search-form-inline" size="sm"}}
   </div>
 </div>
 ```
@@ -322,7 +322,7 @@ module('Integration | Component | results-item', function(hooks) {
 
 Note that only one test fails.
 
-- open tests/integration/components/search-form-test.js and replace its contents with:
+- open tests/integration/components/ago-search-test.js and replace its contents with:
 
 ```js
 import { module, test } from 'qunit';
@@ -330,7 +330,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, fillIn, click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | search-form', function(hooks) {
+module('Integration | Component | ago-search', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
@@ -346,7 +346,7 @@ module('Integration | Component | search-form', function(hooks) {
     });
 
     // render component to the page
-    await render(hbs`{{search-form q=q onSearch=(action doSearch)}}`);
+    await render(hbs`{{ago-search q=q onSearch=(action doSearch)}}`);
 
     // inital dom state
     assert.equal(this.$('input').val().trim(), this.get('q'), 'initial value is set');
@@ -362,7 +362,7 @@ module('Integration | Component | search-form', function(hooks) {
     // test double for the action
     this.set('doSearch', () => {});
     // render component to the page
-    await render(hbs`{{search-form onSearch=(action doSearch) size="lg"}}`);
+    await render(hbs`{{ago-search onSearch=(action doSearch) size="lg"}}`);
     assert.equal(this.$('.input-group-lg').length, 1, 'set proper size');
   });
 });
