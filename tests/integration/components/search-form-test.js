@@ -14,7 +14,7 @@ module('Integration | Component | search-form', function(hooks) {
     this.set('q', 'some initial search text');
 
     // test double for the action
-    this.set('doSearch', (q) => {
+    this.set('doSearch', q => {
       assert.equal(q, 'test', 'updated value was passed up');
     });
 
@@ -29,5 +29,13 @@ module('Integration | Component | search-form', function(hooks) {
     // NOTE: this will trigger onSearch action and above assertion
     await fillIn('input', 'test');
     await click('button');
+  });
+
+  test('can set size', async function (assert) {
+    // test double for the action
+    this.set('doSearch', () => {});
+    // render component to the page
+    await render(hbs`{{search-form onSearch=(action doSearch) size="lg"}}`);
+    assert.equal(this.$('.input-group-lg').length, 1, 'set proper size');
   });
 });
