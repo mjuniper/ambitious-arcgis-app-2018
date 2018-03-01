@@ -49,3 +49,28 @@ Notice that:
 
 Notice that:
 - you can now use the navbar toggle on mobile
+
+## Add ember-arcgis-portal-services
+- stop app (`cmd+C`)
+- depends on torii-provider-arcgis, so first [install and configure that](https://github.com/dbouwman/torii-provider-arcgis#usage):
+ - `ember install torii`
+ - `ember install torii-provider-arcgis`
+ - in config/environment.js add the following above `APP`:
+```js
+torii: {
+  sessionServiceName: 'session',
+  providers: {
+   'arcgis-oauth-bearer': {
+      portalUrl: 'https://www.arcgis.com'
+    }
+  }
+},
+```
+- `ember install ember-arcgis-portal-services`
+- remove fake implementation of itemsService:
+`ember destroy service items-service`
+- `ember serve` and visit `localhost:4200`
+
+Notice that:
+- entering search terms returns real results!
+- Only getting 10 though, so let's add paging
