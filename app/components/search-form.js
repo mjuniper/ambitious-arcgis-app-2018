@@ -16,16 +16,6 @@ export default Component.extend({
     } else {
       return '';
     }
-  }),
-
-  actions: {
-    doSearch () {
-      // calling template passed in an 'onSearch' function,
-      // call it and pass the input's value
-      if (this.onSearch) {
-        this.onSearch(this.get('searchCopy'));
-      }
-    }
-  }
+  })
 
 });
