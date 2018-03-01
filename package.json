@@ -20,6 +20,7 @@
     "bootstrap": "^4.0.0",
     "broccoli-asset-rev": "^2.4.5",
     "ember-ajax": "^3.0.0",
+    "ember-arcgis-opendata-components": "^3.18.0",
     "ember-arcgis-portal-services": "^0.29.0",
     "ember-bootstrap": "^1.2.1",
     "ember-cli": "~3.0.0",

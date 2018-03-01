@@ -78,7 +78,7 @@ Only getting 10 though, so let's add paging
 ## Add paging components from ember-arcgis-opendata-components
 - stop app (`cmd+C`)
 - `ember install ember-arcgis-opendata-components`
-- in app/items/route.js
+- in app/routes/items.js
  - add these query paramters above the `q` param:
 
 ```js
@@ -87,13 +87,13 @@ start: { refreshModel: true },
 num: { refreshModel: true },
 ```
 
- - then update query() call as follows:
+ - then update the `model()` hook as follows:
 
 ```js
 return itemsService.search({ q, num: params.num, start: params.start });
 ```
 
-- in app/items/controller.js add this to the top of the controller:
+- in app/controllers/items.js add this to the top of the controller:
 
 ```js
 // query parameters used by components
@@ -109,9 +109,9 @@ num: 10,
 queryParams: { q , start: 1 }
 ```
 
-- do the same in app/index/controller.js
+- do the same in app/controllers/index.js
 
-- in app/items/template.hbs add this below the table:
+- in app/templates/items.hbs add this below the table:
 
 ```hbs
 {{item-list-pager model=model num=num}}

@@ -1,0 +1,6 @@
+{
+  "name": "ambitious-arcgis-app-2018",
+  "dependencies": {
+    "corejs-typeahead": "1.1.1"
+  }
+}
