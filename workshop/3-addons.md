@@ -53,11 +53,9 @@ Notice that:
 
 ## Add ember-arcgis-portal-services
 - stop app (`cmd+C`)
-- `ember install ember-network`
 - follow instructions here: https://github.com/dbouwman/torii-provider-arcgis#usage
 - `ember install ember-arcgis-portal-services`
 - in config/environment.js add:
-
 ```js
 torii: {
   sessionServiceName: 'session',
