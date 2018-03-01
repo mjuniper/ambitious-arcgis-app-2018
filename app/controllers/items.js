@@ -7,6 +7,10 @@ export default Controller.extend({
   num: 10,
 
   actions: {
+    changePage (page) {
+      console.log(page);
+      // this.set('start', page);
+    },
     doSearch (q) {
       // NOTE: don't need to pass route name b/c same route
       this.transitionToRoute({

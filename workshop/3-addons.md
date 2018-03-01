@@ -124,3 +124,49 @@ queryParams: { q , start: 1 }
 Notice that:
 - you can control the number and starting point for results via query string params
 - searching from a different term (either from home or items route) will reset the starting point, but not the number of records shown
+
+## Bonus: add paging component
+ember-arcgis-portal-components has a paging component you can use. Our components are internationalized so first we install and configure [ember-intl](https://github.com/ember-intl/ember-intl):
+- stop app (`cmd+C`)
+- `ember install ember-intl`
+- we need to set the default locale before the app loads, so we need an application route:
+`ember generate route application`
+- **IMPORTANT: do NOT overwrite the existing app/templates/application.hbs file!**
+- replace the content of app/routes/application.js with:
+
+```js
+import { inject as service } from '@ember/service';
+import Route from '@ember/routing/route';
+
+export default Route.extend({
+  intl: service(),
+  beforeModel() {
+    return this.get('intl').setLocale('en-us');
+  }
+});
+```
+- now we can install portal components addon: `ember install ember-arcgis-portal-components`
+
+- in app/templates/items.hbs add this below the `<table>`:
+
+```hbs
+{{item-pager
+  pageSize=num
+  totalCount=model.total
+  pageNumber=start
+  changePage=(action "changePage")
+}}
+```
+
+- in app/controllers/items.js add this to the actions above `doSearch`:
+
+```js
+changePage (page) {
+ this.set('start', page);
+},
+```
+
+- run `ember serve`
+
+Notice that:
+- there is a paging controller below the table that allows you to page through records
