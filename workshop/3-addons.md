@@ -75,9 +75,27 @@ torii: {
 
 Only getting 10 though, so let's add paging
 
-## Add paging components from ember-arcgis-opendata-components
+## Add paging components from ember-arcgis-portal-components
+Our components are internationalize so first we install and configure [ember-intl](https://github.com/ember-intl/ember-intl):
 - stop app (`cmd+C`)
-- `ember install ember-arcgis-opendata-components`
+- `ember install ember-intl`
+- we need to set the default locale before the app loads, so we need an application route:
+`ember generate route application`
+- replace the content of app/routes/application.js with:
+
+```js
+import { inject as service } from '@ember/service';
+import Route from '@ember/routing/route';
+
+export default Route.extend({
+  intl: service(),
+  beforeModel() {
+    /* NOTE: if you lazily load translations, here is also where you would load them via `intl.addTranslations` */
+    return this.get('intl').setLocale(['en-us']); /* array optional */
+  }
+});
+```
+- now we can install portal components addon: `ember install ember-arcgis-portal-components`
 - in app/routes/items.js
  - add these query paramters above the `q` param:
 
@@ -93,7 +111,16 @@ num: { refreshModel: true },
 return itemsService.search({ q, num: params.num, start: params.start });
 ```
 
-- in app/controllers/items.js add this to the top of the controller:
+- in app/controllers/index.js in `transitionToRoute()` update the query as follows:
+
+```js
+// for a new query string, sart on first page
+queryParams: { q , start: 1 }
+```
+
+- in app/controllers/items.js
+ - update the query as you did above
+ - add this to the top of the controller:
 
 ```js
 // query parameters used by components
@@ -102,19 +129,27 @@ start: 1,
 num: 10,
 ```
 
-- then below in `transitionToRoute()` update the query as follows:
+ - then add this to the actions:
 
 ```js
-// for a new query string, sart on first page
-queryParams: { q , start: 1 }
+changePage (page) {
+  this.set('start', page);
+}
 ```
-
-- do the same in app/controllers/index.js
 
 - in app/templates/items.hbs add this below the table:
 
 ```hbs
-{{item-list-pager model=model num=num}}
+{{item-pager
+  pageSize=num
+  totalCount=model.total
+  pageNumber=start
+  useAriaLabels=false
+  changePage=(action "changePage")
+}}
 ```
 
-- return to the app and start paging through records
+- run `ember serve`
+
+Notice that:
+- there is a paging controller below the table that allows you to page through records

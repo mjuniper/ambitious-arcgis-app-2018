@@ -13,6 +13,9 @@ export default Controller.extend({
         // for a new query string, sart on first page
         queryParams: { q , start: 1 }
       });
+    },
+    changePage (page) {
+      this.set('start', page);
     }
   }
 
