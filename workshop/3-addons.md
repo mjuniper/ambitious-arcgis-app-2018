@@ -192,13 +192,12 @@ changePage (page) {
 Notice that:
 - there is a paging controller below the table that allows you to page through records
 
-## Skip failing tests
+## Fix failing tests
 ember-arcgis-portal-services has not been updated for Ember 3 yet, and it's causing the acceptance test to fail
 - run `ember t -s`, you should see 3 failing tests
 - filter on `!Acceptance`, and all tests should pass
 - open tests/acceptance/smoke-test.js and:
  - add `, waitUntil` to the `import` from `'@ember/test-helpers'`
- - replace the top line w/: `import { module, skip } from 'qunit';`
  - add `import { later } from '@ember/runloop';`
  - add the following _above_ the `assert` statements:
 
