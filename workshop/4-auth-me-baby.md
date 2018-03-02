@@ -30,35 +30,22 @@ Now, move to the Authentication tab, and scroll to the bottom. Add `http://local
 
 First, let's add the markup to `/app/templates/application.hbs`
 
-```html
-<ul class="nav navbar-nav navbar-right">
+```hbs
+{{#navbar.nav class="ml-auto" as |nav|}}
   {{#if session.isAuthenticated}}
-  <li><a href="#" {{action 'signout'}}>Sign Out</a></li>
+    {{#nav.item}}<a href="#" {{action 'signout'}}>Sign Out</a>{{/nav.item}}
   {{else}}
-  {{#active-link}}<a href="#" {{action 'signin'}}>Sign In</a>{{/active-link}}
+    {{#nav.item}}<a href="#" {{action 'signout'}}>Sign In</a>{{/nav.item}}
   {{/if}}
-</ul>
+{{/navbar.nav}}
 ```
 
 Now we need to add the `signin` and `signout` actions to the application route.
 
-Let's generate the route.
-
-```
-ember g route application
-```
-
-Since the template already exists, the generator will ask us if we want to overwrite to skip that file - let's skip it. It should generate a `/app/routes/application.js` file.
-
-Let's start by just wiring things up...
 
 ```
 // routes/application.js
-
-import Route from '@ember/routing/route';
-import { debug } from '@ember/debug';
-
-export default Route.extend({
+...
   actions: {
     signin () {
       debug(' do sign in');
@@ -67,7 +54,7 @@ export default Route.extend({
       debug(' do sign out');
     }
   }
-});
+...
 ```
 
 Now let's run ember and see how things work. `ember s`, open `http://localhost:4200` in your browser, and open dev tools.
@@ -117,12 +104,11 @@ actions: {
   signin () {
     this.get('session').open('arcgis-oauth-bearer')
       .then((authorization) => {
-        Ember.debug('AUTH SUCCESS: ', authorization);
-        //transition to some secured route or... so whatever is needed
+        debug('AUTH SUCCESS: ', authorization);
         this.transitionTo('index');
       })
       .catch((err)=>{
-        Ember.debug('AUTH ERROR: ', err);
+        debug('AUTH ERROR: ', err);
       });
   },
   signout () {
@@ -138,25 +124,16 @@ At this point we have basic authentication working and our session has all our A
 
 But... the user experience is weak. So let's show the current user in the header and move Sign Out into a dropdown.
 
-### Add Bootstrap JS
-To use a dropdown in bootstrap we need the bootstrap javascript. To keep things simple we will pull this from a CDN, but for a production app, you would pull it into the app, and bundle in just the pieces you need.
-
-Open `/app/index.html`, and below the script tag that brings in `ambitious-arcgis-app.js`, add this license
-
-```
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-```
-
-Now, open up `/app/templates/application.hbs` and replace the code between `{{#if session.isAuthenticated}}` and `{{else}}` as shown below.
+Open up `/app/templates/application.hbs` and replace the code between `{{#if session.isAuthenticated}}` and `{{else}}` as shown below.
 
 ```
 {{#if session.isAuthenticated}}
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{session.currentUser.fullName}} <span class="caret"></span></a>
-  <ul class="dropdown-menu">
-    <a class="dropdown-item" href="#" {{action 'signout'}}>Sign Out</a>
-  </ul>
-</li>
+  {{#nav.dropdown as |dd|}}
+    {{#dd.toggle class="ml-auto"}}{{session.currentUser.fullName}}  <span class="caret"></span>{{/dd.toggle}}
+    {{#dd.menu as |ddm|}}
+      {{#ddm.item}}<a class="dropdown-item" href="#" {{action 'signout'}}>Sign Out</a>{{/ddm.item}}
+    {{/dd.menu}}
+  {{/nav.dropdown}}
 {{else}}
 ```
 
@@ -183,6 +160,9 @@ Since `beforeModel` is a really useful place to run initialization, we don't dum
 
 ```
 beforeModel () {
+  //set up the interationalization
+  this.get('intl').setLocale('en-us');
+  // automatically re-hydrate a session
   return this._initSession();
 },
 
