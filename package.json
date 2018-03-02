@@ -17,8 +17,12 @@
     "test": "ember test"
   },
   "devDependencies": {
+    "bootstrap": "^4.0.0",
     "broccoli-asset-rev": "^2.4.5",
     "ember-ajax": "^3.0.0",
+    "ember-arcgis-portal-components": "^0.9.0",
+    "ember-arcgis-portal-services": "^0.29.0",
+    "ember-bootstrap": "^1.2.1",
     "ember-cli": "~3.0.0",
     "ember-cli-app-version": "^3.0.0",
     "ember-cli-babel": "^6.6.0",
@@ -33,12 +37,15 @@
     "ember-cli-uglify": "^2.0.0",
     "ember-data": "~3.0.0",
     "ember-export-application-global": "^2.0.0",
+    "ember-intl": "^2.33.0",
     "ember-load-initializers": "^1.0.0",
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-resolver": "^4.0.0",
     "ember-source": "~3.0.0",
     "eslint-plugin-ember": "^5.0.0",
-    "loader.js": "^4.2.3"
+    "loader.js": "^4.2.3",
+    "torii": "^0.10.1",
+    "torii-provider-arcgis": "^0.12.0"
   },
   "engines": {
     "node": "^4.5 || 6.* || >= 7.*"

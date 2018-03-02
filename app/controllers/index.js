@@ -4,7 +4,7 @@ export default Controller.extend({
   actions: {
     doSearch (q) {
       this.transitionToRoute('items', {
-        queryParams: { q }
+        queryParams: { q , start: 1 }
       });
     }
   }
