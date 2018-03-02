@@ -22,10 +22,10 @@
         {{/each}}
       </tbody>
     </table>
-    {{!item-pager
+    {{item-pager
       pageSize=num
       totalCount=model.total
-      pageNumber=start
+      pageNumber=pageNumber
       changePage=(action "changePage")
     }}
   </div>

@@ -6,7 +6,7 @@ Notice that:
 - the nav menu items are hidden
 - we can't get back to the home page
 
-We'll need to add bootstrap's button to hide/show the collapsible nav bar.
+We'll need to add bootstrap's button to toggle the collapsible nav bar.
 
 The easiest way is to use http://www.ember-bootstrap.com/, which is an ember implementation of most Bootstrap components.
 
@@ -52,7 +52,7 @@ Notice that:
 
 ## Add ember-arcgis-portal-services
 - stop app (`cmd+C`)
-- depends on torii-provider-arcgis, so first [install and configure that](https://github.com/dbouwman/torii-provider-arcgis#usage):
+- first [install and configure torii-provider-arcgis](https://github.com/dbouwman/torii-provider-arcgis#usage):
  - `ember install torii`
  - `ember install torii-provider-arcgis`
  - in config/environment.js add the following above `APP`:
@@ -75,7 +75,7 @@ Notice that:
 - entering search terms returns real results!
 - Only getting 10 though, so let's add paging
 
-## Add paging parameters to routes
+## Add paging parameters to routes and controllers
 in app/routes/items.js:
 - add these query paramters above the `q` param:
 
@@ -126,10 +126,10 @@ Notice that:
 - searching from a different term (either from home or items route) will reset the starting point, but not the number of records shown
 
 ## Bonus: add paging component
-ember-arcgis-portal-components has a paging component you can use. Our components are internationalized so first we install and configure [ember-intl](https://github.com/ember-intl/ember-intl):
+[ember-arcgis-portal-components](https://github.com/Esri/ember-arcgis-portal-components) has [a paging component you can use](https://esri.github.io/ember-arcgis-portal-components/#/itempicker/defaultcatalog). Those components are internationalized so first we install and configure [ember-intl](https://github.com/ember-intl/ember-intl):
 - stop app (`cmd+C`)
 - `ember install ember-intl`
-- we need to set the default locale before the app loads, so we need an application route:
+- we need to set the default locale before the app loads, best place is an application route:
 `ember generate route application`
 - **IMPORTANT: do NOT overwrite the existing app/templates/application.hbs file!**
 - replace the content of app/routes/application.js with:
@@ -147,22 +147,43 @@ export default Route.extend({
 ```
 - now we can install portal components addon: `ember install ember-arcgis-portal-components`
 
-- in app/templates/items.hbs add this below the `<table>`:
+Let's add the `{{item-pager}}` in app/templates/items.hbs:
+- add this below the `<table>`:
 
 ```hbs
 {{item-pager
   pageSize=num
   totalCount=model.total
-  pageNumber=start
+  pageNumber=pageNumber
   changePage=(action "changePage")
 }}
 ```
 
-- in app/controllers/items.js add this to the actions above `doSearch`:
+in app/controllers/items.js:
+- add this to the top of the file:
+`import { computed } from '@ember/object';`
+
+- add this below the `num: 10,` query parameter:
+
+```js
+// compute current page number based on start record
+// and the number of records per page
+pageNumber: computed('num', 'model.start', function () {
+  const pageSize = this.get('num');
+  const start = this.get('model.start');
+  return ((start - 1) / pageSize) + 1;
+}),
+```
+
+- add this to the actions above `doSearch`:
 
 ```js
 changePage (page) {
- this.set('start', page);
+  // calculate next start record based on
+  // the number of records per page
+  const pageSize = this.get('num');
+  const nextStart = ((page - 1) * pageSize) + 1;
+  this.set('start', nextStart);
 },
 ```
 
