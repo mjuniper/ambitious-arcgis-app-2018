@@ -97,3 +97,36 @@ export default Component.extend({
 
 Notice that:
 - you should see a map
+
+### Bonus - map component test
+
+Goal: stub the map service so we don't create a map when testing
+
+- `ember install ember-sinon-qunit`
+- in tests/integration/components/extents-map-test.js:
+ - replace `import { module, test } from 'qunit';` with:
+
+```js
+import { module } from 'qunit';
+import test from 'ember-sinon-qunit/test-support/test';
+```
+
+- replace the contents of the 'it renders' test with:
+
+```js
+// stub the newMap() function so that a map is not constructed
+const mapService = this.owner.lookup('service:map-service');
+const stub = this.stub(mapService, 'newMap');
+
+// Set any properties with this.set('myProperty', 'value');
+// Handle any actions with this.set('myAction', function(val) { ... });
+
+await render(hbs`{{extents-map}}`);
+
+assert.ok(stub.calledOnce, 'newMap was called once');
+```
+
+- run `ember t`
+
+Notice that:
+- all tests pass
