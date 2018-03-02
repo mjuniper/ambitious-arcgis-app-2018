@@ -2,6 +2,7 @@
 export default function mapCoordsToExtent (coords) {
   if (coords && coords.length === 2) {
     return {
+      type: 'extent',
       xmin: coords[0][0],
       ymin: coords[0][1],
       xmax: coords[1][0],

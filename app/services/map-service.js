@@ -1,13 +1,12 @@
-import Evented from '@ember/object/evented';
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
 
-export default Service.extend(Evented, {
+export default Service.extend({
   esriLoader: service('esri-loader'),
   // create a new map object at an element
   newMap(element, mapOptions) {
     // load the map modules
-    this.get('esriLoader').loadModules(['esri/Map', 'esri/views/MapView', 'esri/Graphic'])
+    return this.get('esriLoader').loadModules(['esri/Map', 'esri/views/MapView', 'esri/Graphic'])
     .then(([Map, MapView, Graphic]) => {
       if (!element || this.get('isDestroyed') || this.get('isDestroying')) {
         // component or app was likely destroyed
@@ -24,10 +23,14 @@ export default Service.extend(Evented, {
         map,
         container: element,
         zoom: 2
-      }).when(() => {
-        // TODO: disable scroll navigation
-        // let the rest of the app know that the map is available
-        this.trigger('load');
+      });
+      return this._view.when(() => {
+        this._view.on("mouse-wheel", function(evt){
+          // prevents zooming with the mouse-wheel event
+          evt.stopPropagation();
+        });
+        // let the caller know that the map is available
+        return;
       });
     });
   },
@@ -35,11 +38,11 @@ export default Service.extend(Evented, {
   // clear and add graphics to the map
   refreshGraphics (jsonGraphics) {
     const view = this._view;
-    if (!view || !view.loaded) {
+    if (!view || !view.ready) {
       return;
     }
     // clear any existing graphics
-    view.graphics.clear();
+    view.graphics.removeAll();
     // convert json to graphics and add to map's graphic layer
     if (!jsonGraphics || jsonGraphics.length === 0) {
       return;

@@ -7,6 +7,7 @@ module('Unit | Utility | map/coords-to-extent', function() {
     const coords = [[-53.2316, -79.8433], [180, 79.8433]];
     let result = mapCoordsToExtent(coords);
     assert.deepEqual(result, {
+      type: 'extent',
       xmin: -53.2316,
       ymin: -79.8433,
       xmax: 180,

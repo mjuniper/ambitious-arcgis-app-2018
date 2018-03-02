@@ -188,6 +188,7 @@ test('it handles invalid coords', function(assert) {
 export default function mapCoordsToExtent (coords) {
   if (coords && coords.length === 2) {
     return {
+      type: 'extent',
       xmin: coords[0][0],
       ymin: coords[0][1],
       xmax: coords[1][0],
@@ -202,53 +203,15 @@ export default function mapCoordsToExtent (coords) {
 
 - stop tests by typing `q`
 
-### Add configuration parameters
-Before we add the code to show graphics, let's put any optional parameters into the application config.
-- stop app if running (`cmd+C`)
-- in config/environment.js add this to `APP`:
-
-```js
-map: {
-  options: {
-    basemap: 'gray'
-  },
-  itemExtents: {
-    symbol: {
-      color: [51, 122, 183, 64],
-      outline: {
-        color: [51, 122, 183, 255],
-        width: 1,
-        type: 'esriSLS',
-        style: 'esriSLSSolid'
-      },
-      type: 'esriSFS',
-      style: 'esriSFSSolid'
-    },
-    popupTemplate: {
-      title: '${title}',
-      content: '${snippet}'
-    }
-  }
-}
-```
-
 ### Update the map service
 Add a function to the map service that let's the component add graphics to the map.
 - in app/services/map-service.js:
- - add this to the top of the file:
- `import Evented from '@ember/object/evented';`
- - replace the `export` statement with:
-
-```
-// NOTE: using Evented mixin to relay map events
-export default Service.extend(Evented, {
-```
-
-- then replace the contents of `newMap` with:
+ - replace the contents of `newMap` with:
 
 ```js
 // load the map modules
-this.get('esriLoader').loadModules(['esri/Map', 'esri/views/MapView', 'esri/Graphic'])
+// load the map modules
+return this.get('esriLoader').loadModules(['esri/Map', 'esri/views/MapView', 'esri/Graphic'])
 .then(([Map, MapView, Graphic]) => {
   if (!element || this.get('isDestroyed') || this.get('isDestroying')) {
     // component or app was likely destroyed
@@ -265,10 +228,14 @@ this.get('esriLoader').loadModules(['esri/Map', 'esri/views/MapView', 'esri/Grap
     map,
     container: element,
     zoom: 2
-  }).when(() => {
-    // TODO: disable scroll navigation
-    // let the rest of the app know that the map is available
-    this.trigger('load');
+  });
+  return this._view.when(() => {
+    this._view.on("mouse-wheel", function(evt){
+      // prevents zooming with the mouse-wheel event
+      evt.stopPropagation();
+    });
+    // let the caller know that the map is available
+    return;
   });
 });
 ```
@@ -279,11 +246,11 @@ this.get('esriLoader').loadModules(['esri/Map', 'esri/views/MapView', 'esri/Grap
 // clear and add graphics to the map
 refreshGraphics (jsonGraphics) {
   const view = this._view;
-  if (!view || !view.loaded) {
+  if (!view || !view.ready) {
     return;
   }
   // clear any existing graphics
-  view.graphics.clear();
+  view.graphics.removeAll();
   // convert json to graphics and add to map's graphic layer
   if (!jsonGraphics || jsonGraphics.length === 0) {
     return;
@@ -298,3 +265,95 @@ refreshGraphics (jsonGraphics) {
 
 Notice that:
 - the app functions the same as before (our changes didn't break anything)
+
+### Add configuration parameters
+Before we add the code to show graphics, let's put any optional parameters into the application config.
+- stop app if running (`cmd+C`)
+- in config/environment.js add this to `APP`:
+
+```js
+map: {
+  options: {
+    basemap: 'gray'
+  },
+  itemExtents: {
+    symbol: {
+      color: [51, 122, 183, 0.125],
+      outline: {
+        color: [51, 122, 183, 1],
+        width: 1,
+        type: 'simple-line',
+        style: 'solid'
+      },
+      type: 'simple-fill',
+      style: 'solid'
+    },
+    popupTemplate: {
+      title: '{title}',
+      content: '{snippet}'
+    }
+  }
+}
+```
+
+### Update map component
+
+- run `ember s`
+
+- in app/templates/items.hbs pass the items to the map component by updati the `extents-map` invocation to:
+`{{extents-map items=model.results}}`
+
+- in app/components/extents-map.js add these `import` statements
+
+```js
+import config from '../config/environment';
+import coordsToExtent from '../utils/map/coords-to-extent';
+```
+
+- then add this method:
+
+```js
+// show new item extents on map
+showItemsOnMap () {
+  const { symbol, popupTemplate } = config.APP.map.itemExtents;
+  const jsonGraphics = this.get('items').map(item => {
+    const geometry = coordsToExtent(item.extent);
+    return { geometry, symbol, attributes: item, popupTemplate };
+  });
+  this.get('mapService').refreshGraphics(jsonGraphics);
+},
+```
+
+- then update contents of `didInsertElement()` to:
+
+```js
+this._super(...arguments);
+// create a map at this element's DOM node
+const mapService = this.get('mapService');
+// create a map at this element's DOM node
+mapService.newMap(this.elementId, config.APP.map.options)
+.then(() => {
+  this.showItemsOnMap();
+});
+```
+
+- visit the items route
+
+Notice that:
+- the extents appear on the map
+- you can click on one and see the popup
+- but they don't update when you change the query, or page, so
+
+back in app/components/extents-map/component.js add this method:
+
+```js
+// whenever items change, update the map
+didUpdateAttrs () {
+  this.showItemsOnMap();
+},
+```
+
+- try searching, paging, navigating back to home and searching from there
+
+Notice that:
+- see th extents on the map change when you change query/page

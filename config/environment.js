@@ -36,19 +36,19 @@ module.exports = function(environment) {
         },
         itemExtents: {
           symbol: {
-            color: [51, 122, 183, 64],
+            color: [51, 122, 183, 0.125],
             outline: {
-              color: [51, 122, 183, 255],
+              color: [51, 122, 183, 1],
               width: 1,
-              type: 'esriSLS',
-              style: 'esriSLSSolid'
+              type: 'simple-line',
+              style: 'solid'
             },
-            type: 'esriSFS',
-            style: 'esriSFSSolid'
+            type: 'simple-fill',
+            style: 'solid'
           },
           popupTemplate: {
-            title: '${title}',
-            content: '${snippet}'
+            title: '{title}',
+            content: '{snippet}'
           }
         }
       }
