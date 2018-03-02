@@ -205,7 +205,7 @@ ember-arcgis-portal-services has not been updated for Ember 3 yet, and it's caus
 // force the test to wait a bit longer
 // this should not be necessary but appears to be... _sometimes_
 let flag = false;
-later(() => flag = true, 200);
+later(() => flag = true, 500);
 await waitUntil(() => flag);
 ```
 
