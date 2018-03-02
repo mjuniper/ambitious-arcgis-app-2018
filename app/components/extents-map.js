@@ -28,7 +28,8 @@ export default Component.extend({
   // show new item extents on map
   showItemsOnMap () {
     const { symbol, popupTemplate } = config.APP.map.itemExtents;
-    const jsonGraphics = this.get('items').map(item => {
+    const items = this.get('items');
+    const jsonGraphics = items && items.map(item => {
       const geometry = coordsToExtent(item.extent);
       return { geometry, symbol, attributes: item, popupTemplate };
     });

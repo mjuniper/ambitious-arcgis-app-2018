@@ -316,7 +316,8 @@ import coordsToExtent from '../utils/map/coords-to-extent';
 // show new item extents on map
 showItemsOnMap () {
   const { symbol, popupTemplate } = config.APP.map.itemExtents;
-  const jsonGraphics = this.get('items').map(item => {
+  const items = this.get('items');
+  const jsonGraphics = items && items.map(item => {
     const geometry = coordsToExtent(item.extent);
     return { geometry, symbol, attributes: item, popupTemplate };
   });
@@ -357,3 +358,20 @@ didUpdateAttrs () {
 
 Notice that:
 - see th extents on the map change when you change query/page
+
+### Fix broken test
+in tests/integration/components/extents-map-test.js:
+- add this to the top of the file: `import { resolve } from 'rsvp';`
+- replace the `stub` with:
+
+```js
+const stub = this.stub(mapService, 'newMap').callsFake(() => {
+  // return a promise
+  return resolve();
+});
+```
+
+- run `ember t`
+
+Notice that:
+- tests pass
