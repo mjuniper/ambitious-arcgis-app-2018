@@ -17,7 +17,7 @@ module('Acceptance | smoke', function(hooks) {
     // force the test to wait a bit longer
     // this should not be necessary but appears to be... _sometimes_
     let flag = false;
-    later(() => flag = true, 200);
+    later(() => flag = true, 500);
     await waitUntil(() => flag);
 
     assert.equal(currentURL(), '/items?q=water');
