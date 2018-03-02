@@ -126,7 +126,78 @@ await render(hbs`{{extents-map}}`);
 assert.ok(stub.calledOnce, 'newMap was called once');
 ```
 
-- run `ember t`
+- run `ember t -s`
+- open chrome devtools, inspect network requests
 
 Notice that:
 - all tests pass
+- no network requests are made for JSAPI
+
+## Showing item extents on the map
+
+### Logic
+Once the map has loaded, and whenever map component's items are updated:
+- clear map graphics
+- loop through items, and for each
+ - create a `new Graphic()` from the item
+ - add the graphic to the map
+
+2 sets of async state: Application (Ember) and map:
+- each has own lifecyle (event)
+- up to developer to keep 2 sets of state in sync.
+
+Converting item to a [Graphic](https://developers.arcgis.com/javascript/latest/sample-code/intro-graphics/index.html):
+- get `geometry` by converting item `extent` from coordinate array to extent JSON
+- get `attributes` from item `title` and `snippet`
+- get `infoTemplate` and `symbol` from config
+
+### Add a utility function to transform extent
+
+- `ember g util map/coords-to-extent`
+
+- run tests w/ `ember test -s`
+
+- in tests/unit/utils/map/coords-to-extent-test.js:
+ - remove the unused `hooks` argument from the `module()` callback function
+ - replace the existing `test()` with the following:
+```js
+test('it works', function(assert) {
+  const coords = [[-53.2316, -79.8433], [180, 79.8433]];
+  let result = mapCoordsToExtent(coords);
+  assert.deepEqual(result, {
+    xmin: -53.2316,
+    ymin: -79.8433,
+    xmax: 180,
+    ymax: 79.8433,
+    spatialReference:{
+      wkid:4326
+    }
+  });
+});
+
+test('it handles invalid coords', function(assert) {
+  let result = mapCoordsToExtent([]);
+  assert.equal(result, undefined);
+});
+```
+
+- replace app/utils/map/coords-to-extent.js content with:
+
+```js
+// expect [[-53.2316, -79.8433], [180, 79.8433]] or []
+export default function mapCoordsToExtent (coords) {
+  if (coords && coords.length === 2) {
+    return {
+      xmin: coords[0][0],
+      ymin: coords[0][1],
+      xmax: coords[1][0],
+      ymax: coords[1][1],
+      spatialReference:{
+        wkid:4326
+      }
+    };
+  }
+}
+```
+
+- stop tests by typing `q`
