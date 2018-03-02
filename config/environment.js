@@ -30,6 +30,28 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+      map: {
+        options: {
+          basemap: 'gray'
+        },
+        itemExtents: {
+          symbol: {
+            color: [51, 122, 183, 64],
+            outline: {
+              color: [51, 122, 183, 255],
+              width: 1,
+              type: 'esriSLS',
+              style: 'esriSLSSolid'
+            },
+            type: 'esriSFS',
+            style: 'esriSFSSolid'
+          },
+          popupTemplate: {
+            title: '${title}',
+            content: '${snippet}'
+          }
+        }
+      }
     }
   };
 

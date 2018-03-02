@@ -201,3 +201,100 @@ export default function mapCoordsToExtent (coords) {
 ```
 
 - stop tests by typing `q`
+
+### Add configuration parameters
+Before we add the code to show graphics, let's put any optional parameters into the application config.
+- stop app if running (`cmd+C`)
+- in config/environment.js add this to `APP`:
+
+```js
+map: {
+  options: {
+    basemap: 'gray'
+  },
+  itemExtents: {
+    symbol: {
+      color: [51, 122, 183, 64],
+      outline: {
+        color: [51, 122, 183, 255],
+        width: 1,
+        type: 'esriSLS',
+        style: 'esriSLSSolid'
+      },
+      type: 'esriSFS',
+      style: 'esriSFSSolid'
+    },
+    popupTemplate: {
+      title: '${title}',
+      content: '${snippet}'
+    }
+  }
+}
+```
+
+### Update the map service
+Add a function to the map service that let's the component add graphics to the map.
+- in app/services/map-service.js:
+ - add this to the top of the file:
+ `import Evented from '@ember/object/evented';`
+ - replace the `export` statement with:
+
+```
+// NOTE: using Evented mixin to relay map events
+export default Service.extend(Evented, {
+```
+
+- then replace the contents of `newMap` with:
+
+```js
+// load the map modules
+this.get('esriLoader').loadModules(['esri/Map', 'esri/views/MapView', 'esri/Graphic'])
+.then(([Map, MapView, Graphic]) => {
+  if (!element || this.get('isDestroyed') || this.get('isDestroying')) {
+    // component or app was likely destroyed
+    return;
+  }
+  // create function to return new graphics
+  this._newGraphic = (jsonGraphic) => {
+    return new Graphic(jsonGraphic);
+  };
+  var map = new Map(mapOptions);
+  // show the map at the element and
+  // hold on to the view reference for later operations
+  this._view = new MapView({
+    map,
+    container: element,
+    zoom: 2
+  }).when(() => {
+    // TODO: disable scroll navigation
+    // let the rest of the app know that the map is available
+    this.trigger('load');
+  });
+});
+```
+
+- then add this method:
+
+```js
+// clear and add graphics to the map
+refreshGraphics (jsonGraphics) {
+  const view = this._view;
+  if (!view || !view.loaded) {
+    return;
+  }
+  // clear any existing graphics
+  view.graphics.clear();
+  // convert json to graphics and add to map's graphic layer
+  if (!jsonGraphics || jsonGraphics.length === 0) {
+    return;
+  }
+  jsonGraphics.forEach(jsonGraphic => {
+    view.graphics.add(this._newGraphic(jsonGraphic));
+  });
+},
+```
+
+- run `ember s`
+
+Notice that:
+- the app functions the same as before (our changes didn't break anything)
