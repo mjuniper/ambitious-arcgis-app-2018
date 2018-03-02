@@ -12,6 +12,20 @@
         {{#nav.link-to "items"}}Items{{/nav.link-to}}
       {{/nav.item}}
     {{/navbar.nav}}
+    {{#navbar.nav class="ml-auto" as |nav| }}
+      {{#if session.isAuthenticated}}
+        {{#nav.dropdown as |dd|}}
+          {{#dd.toggle class="ml-auto"}}{{session.currentUser.fullName}}  <span class="caret"></span>{{/dd.toggle}}
+          {{#dd.menu as |ddm|}}
+            {{#ddm.item}}<a class="dropdown-item" href="#" {{action 'signout'}}>Sign Out</a>{{/ddm.item}}
+          {{/dd.menu}}
+        {{/nav.dropdown}}
+      {{else}}
+        {{#nav.item class="ml-auto"}}
+          <a class="nav-item" href="#" {{action 'signin'}}>Sign In</a>
+        {{/nav.item}}
+      {{/if}}
+    {{/navbar.nav}}
   {{/navbar.content}}
 {{/bs-navbar}}
 
