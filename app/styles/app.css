@@ -1,3 +1,5 @@
+@import url('https://js.arcgis.com/4.6/esri/css/main.css');
+
 body {
   padding-top: 3.5rem;
 }
@@ -10,4 +12,10 @@ body {
 /* items */
 .search-form-inline {
   margin-top: 5px;
+}
+
+/* map */
+.extents-map {
+  height: 300px;
+  margin-bottom: 20px;
 }
