@@ -35,7 +35,7 @@ First, let's add the markup to `/app/templates/application.hbs`
   {{#if session.isAuthenticated}}
     {{#nav.item}}<a href="#" {{action 'signout'}}>Sign Out</a>{{/nav.item}}
   {{else}}
-    {{#nav.item}}<a href="#" {{action 'signout'}}>Sign In</a>{{/nav.item}}
+    {{#nav.item}}<a class="nav-link active" href="#" {{action 'signin'}}>Sign In</a>{{/nav.item}}
   {{/if}}
 {{/navbar.nav}}
 ```
