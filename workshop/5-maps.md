@@ -2,7 +2,7 @@
 
 ## Adding a basic map using ember-esri-loader
 
-- stop app (`cmd+C`)
+- stop app (`ctrl+C`)
 
 - `ember install ember-esri-loader`
 
@@ -268,7 +268,7 @@ Notice that:
 
 ### Add configuration parameters
 Before we add the code to show graphics, let's put any optional parameters into the application config.
-- stop app if running (`cmd+C`)
+- stop app if running (`ctrl+C`)
 - in config/environment.js add this to `APP`:
 
 ```js
