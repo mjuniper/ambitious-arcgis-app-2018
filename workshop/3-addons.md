@@ -11,7 +11,7 @@ We'll need to add bootstrap's button to toggle the collapsible nav bar.
 The easiest way is to use http://www.ember-bootstrap.com/, which is an ember implementation of most Bootstrap components.
 
 ## Add ember-bootstrap
-- stop app (`cmd+C`)
+- stop app (`ctrl+C`)
 - `ember install ember-bootstrap`
 - configure to use the latest Bootstrap (v4) by running:
 `ember generate ember-bootstrap --bootstrap-version=4`
@@ -51,7 +51,7 @@ Notice that:
 - you can now use the navbar toggle on mobile
 
 ## Add ember-arcgis-portal-services
-- stop app (`cmd+C`)
+- stop app (`ctrl+C`)
 - first [install and configure torii-provider-arcgis](https://github.com/dbouwman/torii-provider-arcgis#usage):
  - `ember install torii`
  - `ember install torii-provider-arcgis`
@@ -127,7 +127,7 @@ Notice that:
 
 ## Bonus: add paging component
 [ember-arcgis-portal-components](https://github.com/Esri/ember-arcgis-portal-components) has [a paging component you can use](https://esri.github.io/ember-arcgis-portal-components/#/itempicker/defaultcatalog). Those components are internationalized so first we install and configure [ember-intl](https://github.com/ember-intl/ember-intl):
-- stop app (`cmd+C`)
+- stop app (`ctrl+C`)
 - `ember install ember-intl`
 - we need to set the default locale before the app loads, best place is an application route:
 `ember generate route application`

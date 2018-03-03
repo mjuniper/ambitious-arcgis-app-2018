@@ -6,7 +6,7 @@ http://surge.sh/
 
 https://github.com/kiwiupover/ember-cli-surge
 
-- stop app (`cmd+C`)
+- stop app (`ctrl+C`)
 - `ember install ember-cli-surge`
 - `ember generate surge-domain ambitious-arcgis-app-<something-unique>.surge.sh`
 - `ember surge --environment=development` (you will be prompted to create an account)
