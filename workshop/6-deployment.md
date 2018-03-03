@@ -1,5 +1,7 @@
 # Deployment
 
+Great - now we have a working app! Let's get it off our local machine and out into the world. There are many ways to deploy an app; today we are going to cover two of them.
+
 ## surge
 
 http://surge.sh/
@@ -8,8 +10,8 @@ https://github.com/kiwiupover/ember-cli-surge
 
 - stop app (`cmd+C`)
 - `ember install ember-cli-surge`
-- `ember generate surge-domain ambitious-arcgis-app-<something-unique>.surge.sh`
-- `ember surge --environment=development` (you will be prompted to create an account)
+- `ember g surge-domain ambitious-arcgis-app-<something-unique>.surge.sh`
+- `ember surge --environment=development` (create an account if you haven't already)
 - visit ambitious-arcgis-app-&lt;something-unique&gt;.surge.sh
 
 ## ember-cli-deploy & s3 (demo)
