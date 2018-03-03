@@ -160,11 +160,13 @@ Converting item to a [Graphic](https://developers.arcgis.com/javascript/latest/s
 - in tests/unit/utils/map/coords-to-extent-test.js:
  - remove the unused `hooks` argument from the `module()` callback function
  - replace the existing `test()` with the following:
+
 ```js
 test('it works', function(assert) {
   const coords = [[-53.2316, -79.8433], [180, 79.8433]];
   let result = mapCoordsToExtent(coords);
   assert.deepEqual(result, {
+    type: 'extent',
     xmin: -53.2316,
     ymin: -79.8433,
     xmax: 180,
@@ -204,12 +206,11 @@ export default function mapCoordsToExtent (coords) {
 - stop tests by typing `q`
 
 ### Update the map service
-Add a function to the map service that let's the component add graphics to the map.
+Add a function to the map service that lets the component add graphics to the map.
 - in app/services/map-service.js:
  - replace the contents of `newMap` with:
 
 ```js
-// load the map modules
 // load the map modules
 return this.get('esriLoader').loadModules(['esri/Map', 'esri/views/MapView', 'esri/Graphic'])
 .then(([Map, MapView, Graphic]) => {
@@ -300,7 +301,7 @@ map: {
 
 - run `ember s`
 
-- in app/templates/items.hbs pass the items to the map component by updati the `extents-map` invocation to:
+- in app/templates/items.hbs pass the items to the map component by updating the `extents-map` invocation to:
 `{{extents-map items=model.results}}`
 
 - in app/components/extents-map.js add these `import` statements
@@ -345,7 +346,7 @@ Notice that:
 - you can click on one and see the popup
 - but they don't update when you change the query, or page, so
 
-back in app/components/extents-map/component.js add this method:
+back in app/components/extents-map.js add this method:
 
 ```js
 // whenever items change, update the map
@@ -357,7 +358,7 @@ didUpdateAttrs () {
 - try searching, paging, navigating back to home and searching from there
 
 Notice that:
-- see th extents on the map change when you change query/page
+- see the extents on the map change when you change query/page
 
 ### Fix broken test
 in tests/integration/components/extents-map-test.js:

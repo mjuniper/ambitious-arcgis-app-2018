@@ -56,6 +56,7 @@ Notice that:
  - `ember install torii`
  - `ember install torii-provider-arcgis`
  - in config/environment.js add the following above `APP`:
+
 ```js
 torii: {
   sessionServiceName: 'session',
@@ -66,6 +67,7 @@ torii: {
   }
 },
 ```
+
 - `ember install ember-arcgis-portal-services`
 - remove fake implementation of itemsService:
 `ember destroy service items-service`
