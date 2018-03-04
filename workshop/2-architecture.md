@@ -275,7 +275,7 @@ export default Route.extend({
 tagName: 'tr'
 ```
 
-- open app/templates/items.hbs and replace the `tr` and its contents with:
+- open app/templates/items.hbs and replace the second `tr` and its contents with:
 
 ```hbs
 {{results-item model=item}}
