@@ -4,7 +4,7 @@ We already installed `torii-provider-arcgis`, but now we will actually configure
 
 ## Register your app with ArcGIS.com
 
-Sign in at `developers.arcgis.com` and click "Register a New Application".
+Sign in at `developers.arcgis.com` and click "+" dropdown and then "New Application".
 
 Give your app a name, tags and a description and click the "Register" button.
 
