@@ -4,7 +4,7 @@ We already installed `torii-provider-arcgis`, but now we will actually configure
 
 ## Register your app with ArcGIS.com
 
-Sign in at `developers.arcgis.com` and click "Register a New Application".
+Sign in at `developers.arcgis.com` and click the "+" dropdown and then "New Application".
 
 Give your app a name, tags and a description and click the "Register" button.
 
@@ -42,6 +42,10 @@ First, let's add the markup to `/app/templates/application.hbs`
 
 Now we need to add the `signin` and `signout` actions to the application route.
 
+Add before the Route definition
+```
+import { debug } from '@ember/debug';
+```
 
 ```
 // routes/application.js
@@ -65,22 +69,22 @@ You should see your "Sign In" link in the nav bar. Clicking on it, should add me
 The `torii-provider-arcgis` hides pretty much all the details, but we do need to drop some code into the `signin` action...
 
 ```
-// application/route.js
+// app/routes/application.js
 ...
 actions: {
   signin () {
     this.get('session').open('arcgis-oauth-bearer')
       .then((authorization) => {
-        Ember.debug('AUTH SUCCESS: ', authorization);
+        debug('AUTH SUCCESS: ', authorization);
         //transition to some secured route or... so whatever is needed
         this.transitionTo('index');
       })
       .catch((err)=>{
-        Ember.debug('AUTH ERROR: ', err);
+        debug('AUTH ERROR: ', err);
       });
   },
   signout () {
-    Ember.debug(' do sign out');
+    debug(' do sign out');
   }
 }
 ...
@@ -150,7 +154,8 @@ The first hook we have in the application life-cycle is the `beforeModel()` hook
 
 ```
 beforeModel () {
-  Ember.debug('ApplicationRoute:beforeModel');
+  debug('ApplicationRoute:beforeModel');
+  // ...
 },
 ```
 
@@ -169,11 +174,11 @@ beforeModel () {
 _initSession () {
   return this.get('session').fetch()
     .then(() => {
-      Ember.debug('User has been automatically logged in... ');
+      debug('User has been automatically logged in... ');
     })
     .catch((/*err*/) => {
       // we want to catch this, otherwise Ember will redirect to an error route!
-      Ember.debug('No cookie was found, user is anonymous... ');
+      debug('No cookie was found, user is anonymous... ');
     });
 },
 ```
