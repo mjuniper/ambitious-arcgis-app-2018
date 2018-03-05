@@ -10,7 +10,7 @@ https://github.com/kiwiupover/ember-cli-surge
 
 - stop app (`ctrl+C`)
 - `ember install ember-cli-surge`
-- come up with <something-unique> for your website url
+- come up with something-unique for your website url
 - `ember g surge-domain ambitious-arcgis-app-<something-unique>.surge.sh`
   - when asked if you would like to overwrite CNAME, respond 'y' for yes
 - `ember surge --environment=development`
@@ -30,7 +30,6 @@ http://ember-cli-deploy.com/
 config/deploy.js ==>
 
 ```js
-/* jshint node: true */
 
 module.exports = function(deployTarget) {
   var ENV = {
@@ -52,6 +51,6 @@ module.exports = function(deployTarget) {
 };
 ```
 
-...more intervening steps leading eventually to the promised land
+...more intervening steps eventually leading to the promised land
 
 - `ember deploy <environment> --activate`
