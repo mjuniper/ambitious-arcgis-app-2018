@@ -10,20 +10,24 @@ https://github.com/kiwiupover/ember-cli-surge
 
 - stop app (`ctrl+C`)
 - `ember install ember-cli-surge`
+- come up with <something-unique> for your website url
 - `ember g surge-domain ambitious-arcgis-app-<something-unique>.surge.sh`
-- `ember surge --environment=development` (create an account if you haven't already)
-- visit ambitious-arcgis-app-&lt;something-unique&gt;.surge.sh
+  - when asked if you would like to overwrite CNAME, respond 'y' for yes
+- `ember surge --environment=development`
+  - create an account when prompted, if you do not already have a surge account
+- visit `ambitious-arcgis-app-<something-unique>.surge.sh`
 
-## ember-cli-deploy & s3 (demo)
+## ember-cli-deploy (demo)
 
 http://ember-cli-deploy.com/
 
-https://github.com/Gaurav0/ember-cli-deploy-s3-pack
 
 - `ember install ember-cli-deploy`
-- `ember install ember-cli-deploy-s3-pack`
-- [I already have an s3 account, have created my buckets, have created the .env file, & .gitignored it!]
-- config/deploy.js ==>
+
+- [have an s3 account, create buckets, create the .env file, & .gitignore it!]
+- Lots of intervening steps including
+
+config/deploy.js ==>
 
 ```js
 /* jshint node: true */
@@ -48,16 +52,6 @@ module.exports = function(deployTarget) {
 };
 ```
 
-- open ember-cli-build.js and add:
- - `var env = EmberApp.env() || 'development';` below `var EmberApp...`
- - the following above the `amd` section:
+...more intervening steps leading eventually to the promised land
 
-```js
-  fingerprint: {
-    enabled: env === 'production',
-    prepend: 'http://ambitious-arcgis-app.s3-website-us-east-1.amazonaws.com/'
-  },
-```
-
-- `ember deploy production --activate`
-- visit http://ambitious-arcgis-app-index.s3-website-us-east-1.amazonaws.com/
+- `ember deploy <environment> --activate`
