@@ -384,3 +384,6 @@ assert.equal(findAll('table tbody tr').length, 10);
 ### Notes:
 - component integration tests
 - more acceptance tests
+
+
+`git remote add origin https://github.com/mjuniper/ambitious-arcgis-app-2018-live.git`
